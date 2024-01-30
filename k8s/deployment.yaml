@@ -1,0 +1,35 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: deploy
+  annotations:
+    description: Node Hello
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: node-hello
+  template:
+    metadata:
+      name: node-hello
+      labels:
+        env: dev
+        name: node-hello
+    spec:
+      containers:
+        - name: node-hello
+          image: node-hello:latest
+          ports:
+            - containerPort: 3000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: service
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    name: deployment
+  type: NodePort
